@@ -4,6 +4,7 @@ import { Home } from "./pages/Home";
 import { useDispatch } from "react-redux";
 import { setWebSocket } from "./app/features/websocketSlice";
 import { store } from "./app/store";
+import { Login } from "./pages/Login";
 
 
 function App() {
@@ -37,13 +38,13 @@ function App() {
         <Routes>
           <Route path="/">
             <Route index element={<Home/>} />
+            <Route path="login" element={<Login/>} />
           </Route>
         </Routes>
       </BrowserRouter>
     : (
       <div className="absolute w-full h-full flex justify-center items-center flex-col">
         <p>Loading...</p>
-        <img width={100} height={100} src={require('./assets/loading.gif')} alt='loading...'/>
       </div>
     )
     }

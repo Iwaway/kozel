@@ -1,6 +1,5 @@
-export interface LobbyUser {
-    ws: WebSocket;
-    nickname: string;
-    isReady: boolean;
-    isLeader: boolean;
-};
+export interface User {
+    id: string | null;
+    token: string | null;
+    nickname: string | null;
+}
