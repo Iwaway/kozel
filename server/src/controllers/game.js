@@ -294,6 +294,44 @@ class Game{
                 this.actions.decideTrump(ws, gameId, lobbies, games);
             }
         },
+
+        decideTrump: (ws, gameId, lobbies, games) => {
+            const trumps = trumped[gameId];
+            console.log(trumps);
+
+            if (trumps.users.length === 1) {
+                this.actions.pickTrump(ws, {gameId, nickname: trumps.users[0].nickname, trump: trumps.users[0].trump}, lobbies, games);
+            } else {
+                const minSide = Math.min(...trumps.users.map(v => v.side));
+                const allMinSides = trumps.users.filter(v => v.side === minSide);
+                console.log(minSide, allMinSides);
+
+                if (allMinSides.length === 1) {
+                    this.actions.pickTrump(ws, {gameId, nickname: allMinSides[0].nickname, trump: allMinSides[0].trump}, lobbies, games);
+                } else {
+                    const acedTrumps = trumps.users.filter(v => v.isAce === true);
+                    console.log(acedTrumps);
+
+                    if (acedTrumps.length === 1) {
+                        this.actions.pickTrump(ws, {gameId, nickname: acedTrumps[0].nickname, trump: acedTrumps[0].trump}, lobbies, games);
+                    } else {
+                        for (let index = 0; index < trumps.users[0].trumpCards.length; index++) {
+                            let powers = [];
+                            trumps.users.forEach((user) => {
+                                powers.push({nickname: user.nickname, power: user.trumpCards[index].power, trump: user.trump});
+                            });
+                            const maxPower = Math.max(...powers.map(v => v.power));
+                            const allMaxPowers = powers.filter(v => v.power === maxPower);
+
+                            if (allMaxPowers.length === 1) {
+                                this.actions.pickTrump(ws, {gameId, nickname: allMaxPowers[0].nickname, trump: allMaxPowers[0].trump}, lobbies, games);
+                                break;
+                            }
+                        }
+                    }
+                }
+            };
+        },
     }
     getMessage(ws, route, lobbyId, data, lobbies, games){
         const lobby = lobbies['lobby#'+lobbyId];
