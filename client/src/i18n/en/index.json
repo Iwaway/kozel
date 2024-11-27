@@ -1,0 +1,103 @@
+{
+    "language": "English",
+    "changeLanguage": "Change language",
+
+    "home": {
+      "title": "Home page",
+      "greetings": "Welcome,",
+      "submit": "Join",
+      "joinRoom": "Join Lobby",
+      "createRoom": {
+        "title": "Create Lobby",
+        "submit": "Create",
+        "password": "Enter Lobby password"
+    },
+      "codeLabel": "Enter Lobby code",
+      "passwordLabel": "Enter Lobby password"
+  },
+
+  "profile": {
+      "title": "Profile"
+  },
+
+  "lobby": {
+      "title": "Lobby",
+      "subtitle": "Lobby invation code:",
+      "start": "Start Game",
+      "disconnect": "Disconnect",
+      "ready": {
+        "title": "Ready:",
+        "yes": "Yes",
+        "no": "No",
+        "yesBtn": "Ready",
+        "noBtn": "Not ready"
+      },
+      "chat": {
+        "title": "Chat",
+        "send": "Send",
+        "placeholder": "Type message here...",
+        "loginfo": "Log Info"
+      },
+      "modal": {
+        "title": "Choose teammate",
+        "subtitle": "Select nickname of user to choose teammate:",
+        "submit": "Submit"
+      },
+      "copy": "Lobby invation code saved to clipboard!"
+  },
+
+  "game": {
+    "trumps": {
+      "diamonds": "Diamonds",
+      "spades": "Spades",
+      "clubs": "Clubs",
+      "hearts": "Hearts"
+    },
+    "trump": "Trump",
+    "chooseTrump": {
+        "title": "Choose trump",
+        "pass": "Pass"
+    },
+    "dealResult": "Deal result: Team 1 gets {{team1points}} points; Team 2 gets {{team2points}} points",
+    "pickDeal": "{{nickname}} choosed deal:",
+    "chooseDealTitle": "Choose deal",
+    "deals": {
+      "all": "All",
+      "one": "One",
+      "pants": "Pants",
+      "satellite": "Satellite"
+    },
+    "team": "Team",
+    "eyes": "Eyes",
+    "points": "Points",
+    "turn": "Youre turn",
+    "noTurn": "Not your turn",
+    "pickTrump": "{{nickname}} picks trump with {{side}} to side",
+    "passTrump": "{{nickname}} pass to pick trump",
+    "pickTrumpRes": "{{nickname}} picks trump:",
+    "drawCard": "{{nickname}} draws {{cardValue}} of",
+    "notDrawCard": "You cannot draw this card.\nYou need to draw card of",
+    "notDrawCardJack": "You cannot draw this card.\nYou need to draw Jack or card of",
+    "winRound": "{{nickname}} win. Team {{team}} scored {{points}} points",
+    "eggs": "Draw. New turn with x2 eyes for lose",
+    "eggsTitle": "Eggs",
+    "eggsDescription": "x2 to eyes",
+    "winTurn": "Team {{team}} win with {{points}} points.\nOpposite Team gets {{eyes}} eyes.\nNew turn",
+    "winGame": "Team {{team}} win. New game",
+    "title": ""
+  },
+
+  "auth": {
+    "login": {
+        "title": "Log In",
+        "submit": "Log In"
+    },
+    "signin": {
+        "title": "Sign In",
+        "submit": "Sign In",
+        "nickname": "Nickname"
+    },
+    "password": "Password",
+    "email": "Email"
+}
+  }  
