@@ -1,7 +1,11 @@
 const wss = require('./server');
 const uuidv4 = require("uuid").v4;
 
+const Lobby = require('./controllers/lobby');
+const lobby = new Lobby(chat);
+
 const connections = {};
+const lobbies = {};
 
 wss.on('connection', (ws) => {
     const uuid = uuidv4();
