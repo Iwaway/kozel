@@ -1,4 +1,7 @@
 {
+  "name": "goat-app-server",
+  "version": "0.9.0",
+  "private": true,
   "dependencies": {
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
@@ -12,5 +15,8 @@
     "uuid": "^10.0.0",
     "validator": "^13.12.0",
     "ws": "^8.18.0"
+  },
+  "scripts": {
+    "start": "node ./src/ws.js"
   }
 }
