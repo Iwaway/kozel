@@ -13,6 +13,9 @@ const utils = {
         console.log(uid);
         return uid;
     },
+    isEmpty: (obj) => {
+        return Object.keys(obj).length === 0;
+    },
 }
 
 module.exports = utils;
