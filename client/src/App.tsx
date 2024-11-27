@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Login } from "./pages/Login";
 import { Home } from "./pages/Home";
 import { useDispatch } from "react-redux";
 import { setWebSocket } from "./app/features/websocketSlice";
+import { Lobby } from "./pages/Lobby";
 import { store } from "./app/store";
-import { Login } from "./pages/Login";
-
+import { Settings } from "./pages/Settings";
+import { Game } from "./pages/Game";
 
 function App() {
   const dispatch = useDispatch();
@@ -39,12 +41,16 @@ function App() {
           <Route path="/">
             <Route index element={<Home/>} />
             <Route path="login" element={<Login/>} />
+            <Route path="lobby" element={<Lobby/>} />
+            <Route path="settings" element={<Settings/>} />
+            <Route path="game" element={<Game/>} />
           </Route>
         </Routes>
       </BrowserRouter>
     : (
       <div className="absolute w-full h-full flex justify-center items-center flex-col">
         <p>Loading...</p>
+        <img width={100} height={100} src={require('./assets/loading.gif')} alt='loading...'/>
       </div>
     )
     }
