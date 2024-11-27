@@ -1,6 +1,6 @@
 {
-  "name": "goat-app",
-  "version": "0.1.0",
+  "name": "goat-app-client",
+  "version": "0.9.0",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
@@ -13,6 +13,7 @@
     "@types/react-dom": "^18.3.0",
     "@uidotdev/usehooks": "^2.4.1",
     "axios": "^1.7.5",
+    "concurrently": "^9.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "html-react-parser": "^5.1.12",
@@ -33,7 +34,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "client": "sudo PORT=8080 react-scripts start",
+    "server": "node ../server/src/ws.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
