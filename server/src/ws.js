@@ -1,6 +1,7 @@
 const wss = require('./server');
 const uuidv4 = require("uuid").v4;
-
+const Chat = require('./controllers/chat');
+const chat = new Chat();
 const Lobby = require('./controllers/lobby');
 const lobby = new Lobby(chat);
 
