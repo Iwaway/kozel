@@ -123,6 +123,125 @@ class Game{
                 });
             }
         },
+
+        decideTurn: (ws, {gameId, firstTurnNickname}, lobbies, games) => {
+            const game = games['game#'+gameId];
+            game.users.filter(v => v.nickname === firstTurnNickname)[0].turn = 1;
+            const firstIndex = game.users.findIndex(v => v.nickname === firstTurnNickname);
+            let i = firstIndex;
+            let turn = 1;
+
+            for (let index = 1; index < game.users.length; index++) {
+                try {
+                    i += 1;
+                    turn += 1;
+                    game.users[i].turn = turn;
+                } catch (e) {
+                    game.users[i - game.users.length].turn = turn;
+                }
+            }
+        },
+
+        makeTurn: (ws, {gameId, nickname, card}, lobbies, games) => {
+            const game = games['game#'+gameId];
+            const gameUser = game.users.filter(v => v.nickname === nickname)[0];
+            const round = game.round;
+            let suitCards = [];
+
+            if (round.suit === game.trump) {
+                suitCards = gameUser.cards.filter(v => v.suit === round.suit || v.value === 'J');
+            } else {
+                suitCards = gameUser.cards.filter(v => v.suit === round.suit && v.value !== 'J');
+            }
+            
+            console.log('suitCard:', suitCards);
+            var message = {};
+            var roundCard = {};
+
+            if (round.cards.length === 0) {
+                if (card.value === 'J') {
+                    round.suit = game.trump;
+                } else {
+                    round.suit = card.suit;
+                };
+                const newCards = gameUser.cards.filter(v => v.id !== card.id);
+                gameUser.cards = newCards;
+                round.cards.push({nickname: nickname, card: card});
+                message = {
+                    keys: ['game.drawCard', `game.trumps.${card.suit}`],
+                    values: {
+                        nickname: nickname,
+                        cardValue: card.value,
+                    },
+                };
+                roundCard = card;
+            } else {
+                if (card.suit === round.suit || suitCards.length === 0 || (round.suit === game.trump && card.value === 'J')) {
+                    const newCards = gameUser.cards.filter(v => v.id !== card.id);
+                    gameUser.cards = newCards;
+                    round.cards.push({nickname: nickname, card: card});
+                    message = {
+                        keys: ['game.drawCard', `game.trumps.${card.suit}`],
+                        values: {
+                            nickname: nickname,
+                            cardValue: card.value,
+                        },
+                    };
+                    roundCard = card;
+                } else {
+                    message = {
+                        keys: round.suit === game.trump ? [`game.notDrawCardJack`, `game.trumps.${round.suit}`] : [`game.notDrawCard`, `game.trumps.${round.suit}`],
+                        values: {
+                            suit: round.suit,
+                        },
+                    };
+
+                    const res = {route: 'updateGame', status: 'error', data: {message}};
+                    console.log("#res:", res);
+                    ws.send(JSON.stringify(res));
+                    return false;
+                }
+            };
+
+            if (game.turn !== 4) {
+                game.turn = game.turn + 1;
+            } else {
+                game.turn = 1;
+                const res = {route: 'updateGame', status: 'ok', makeTurn: true, card: roundCard, data: {game, message}};
+
+                game.users.forEach((user) => {
+                    user.ws.send(JSON.stringify(res));
+                });
+
+                const winMessage = this.actions.decideRoundWinner(ws, {gameId}, lobbies, games);
+                message = winMessage;
+
+                setTimeout(() => {
+                    const res = {route: 'updateGame', status: 'ok', makeTurn: true, card: roundCard, data: {game, message}};
+                    console.log("#res:", res);
+        
+                    game.users.forEach((user) => {
+                        user.ws.send(JSON.stringify(res));
+                    });
+        
+                    if (game.users.filter(v => v.cards.length === 0).length === 4) {
+                        this.actions.decideTurnWinner(ws, {gameId}, lobbies, games);
+                    }
+                }, 1500);
+                return;
+            }
+
+            const res = {route: 'updateGame', status: 'ok', makeTurn: true, card: roundCard, data: {game, message}};
+            console.log("#res:", res);
+
+            game.users.forEach((user) => {
+                user.ws.send(JSON.stringify(res));
+            });
+
+            if (game.users.filter(v => v.cards.length === 0).length === 4) {
+                this.actions.decideTurnWinner(ws, {gameId}, lobbies, games);
+            }
+        },
     }
     getMessage(ws, route, lobbyId, data, lobbies, games){
         const lobby = lobbies['lobby#'+lobbyId];
