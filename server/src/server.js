@@ -1,5 +1,6 @@
 const { createServer } = require('http');
 const WebSocket = require('ws');
+const routes = require('./httpRoutes');
 const utils = require('./utils/utils');
 require('dotenv').config();
 
@@ -19,6 +20,7 @@ const server = createServer((req, res) =>{
                 const data = utils.extractJsonData(inputData);
                 const route = req.url.slice(1);
                 console.log(route, data);
+                if(routes[route]) await routes[route](res, data);
             }catch(e){
                 console.log(e);
             }
@@ -26,7 +28,7 @@ const server = createServer((req, res) =>{
     };
 });
 
-server.listen(process.env.PORT, () => console.log('Server listen at port: ', process.env.PORT || 80));
+server.listen(process.env.PORT, () => console.log('Server listen at port: ', process.env.PORT));
 
 const ws = new WebSocket.Server({ server });
 

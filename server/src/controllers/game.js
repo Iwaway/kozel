@@ -242,6 +242,58 @@ class Game{
                 this.actions.decideTurnWinner(ws, {gameId}, lobbies, games);
             }
         },
+        proposeTrump: (ws, {gameId, trump, cards}, lobbies, games) => {
+            const game = games['game#'+gameId];
+            const nickname = game.users.filter(v => v.ws === ws)[0].nickname;
+            var message = {};
+
+            if (trump !== '') {
+                const trumpCards = cards.filter(v => v.suit === trump || v.value === 'J');
+                const side = cards.length - trumpCards.length;
+                const isAce = trumpCards.filter(v => v.value === 'A').length === 1 ? true : false;
+
+                trumpCards.sort(function(a,b) {
+                    return a.power - b.power;
+                });
+    
+                trumped[gameId].users.push({nickname: nickname, trump: trump, side: side, isAce: isAce, trumpCards: trumpCards});
+                message = {
+                    keys: ['game.pickTrump'],
+                    values: {
+                        nickname: nickname,
+                        side: side,
+                    },
+                };
+            } else {
+                message = {
+                    keys: ['game.passTrump'],
+                    values: {
+                        nickname: nickname,
+                    },
+                };
+            }
+
+            const trumpLength = trumped[gameId].users.length;
+
+            if (game.turn !== 4) {
+                game.turn = game.turn + 1;
+            } else {
+                if (trumpLength && trumpLength === 1 && trumped[gameId].users[0].nickname === nickname) {
+                    message = '';
+                }
+            }
+
+            const res = {route: 'proposeTrump', status: 'ok', data: {game, trumpLength, message}};
+            console.log("#res:", res);
+
+            game.users.forEach((user) => {
+                user.ws.send(JSON.stringify(res));
+            });
+
+            if (game.turn === 4 && game.users.filter(v => v.nickname === nickname)[0].turn === 4) {
+                this.actions.decideTrump(ws, gameId, lobbies, games);
+            }
+        },
     }
     getMessage(ws, route, lobbyId, data, lobbies, games){
         const lobby = lobbies['lobby#'+lobbyId];
