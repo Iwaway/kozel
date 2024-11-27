@@ -26,7 +26,7 @@ const server = createServer((req, res) =>{
     };
 });
 
-server.listen(process.env.PORT, () => console.log('Server listen at port: ', process.env.PORT));
+server.listen(process.env.PORT, () => console.log('Server listen at port: ', process.env.PORT || 80));
 
 const ws = new WebSocket.Server({ server });
 
